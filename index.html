@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a1130">
+<meta name="description" content="cpbc플러스 대림 이벤트 「나의 성탄 트리 꾸미기」 미리보기">
+<title>나의 성탄 트리 꾸미기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<style>
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+[hidden] { display: none !important; }
+</style>
+<style>
+/* 레이아웃: 데스크톱은 왼쪽 조작판 + 오른쪽 폰 한 화면(스크롤 없음). 나머지 정보는 바텀 시트·사이드 바 */
+:root {
+  --night: #101a3f; --night-3: #26336e; --deep: #0a1130;
+  --gold: #e8c77a; --gold-soft: #f3e2b3; --purple: #7b5cc4; --rose: #e58fae; --rose-soft: #f6c6d6;
+  --cream: #fff8ec; --text: #f7f3ea; --dim: #c5c8e0; --ink: #1f2a5c; --line: rgba(255,255,255,.14);
+  --sheet: #16204d;
+  --font-body: "Gowun Dodum", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  --font-display: "Jua", "Gowun Dodum", "Apple SD Gothic Neo", sans-serif;
+  --peek: 68px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--deep); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.5; word-break: keep-all;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 16px 24px; }
+h1, h2, h3, .display { font-family: var(--font-display); font-weight: 400; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+img { display: block; max-width: 100%; user-select: none; -webkit-user-drag: none; }
+button { font: inherit; color: inherit; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+.shell { display: grid; grid-template-columns: 270px 390px; gap: 32px; justify-content: center; align-items: start; max-width: 760px; margin: 0 auto; }
+@media (max-width: 720px) { .shell { grid-template-columns: 1fr; gap: 12px; } }
+.ctrl { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.ctrl summary { cursor: pointer; font-family: var(--font-display); font-size: 20px; color: var(--gold-soft); list-style: none; min-height: 40px; display: flex; align-items: center; gap: 8px; }
+.ctrl summary::-webkit-details-marker { display: none; }
+.ctrl summary::after { content: "▾"; font-size: 14px; color: var(--dim); }
+.ctrl details[open] summary::after { content: "▴"; }
+.ctrl .body { display: flex; flex-direction: column; gap: 12px; padding-top: 4px; }
+.ctrl p { color: var(--dim); font-size: 14px; }
+.lbl { font-size: 12px; letter-spacing: .06em; color: var(--dim); }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { min-height: 40px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--line); background: rgba(255,255,255,.05); cursor: pointer; font-size: 14px; }
+.seg button[aria-pressed="true"] { border-color: var(--gold); background: rgba(232,199,122,.18); color: var(--gold-soft); }
+
+/* 폰 */
+.phone { width: 100%; max-width: 390px; height: 780px; margin: 0 auto; border-radius: 36px; border: 1px solid var(--line); overflow: hidden; position: relative;
+  background: radial-gradient(120% 700px at 50% 0%, var(--night-3) 0%, var(--night) 60%, var(--deep) 100%); background-size: cover; background-position: center bottom; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+.phone.scene::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,12,38,.62) 0%, rgba(8,12,38,0) 26%, rgba(8,12,38,0) 70%, rgba(8,12,38,.5) 100%); pointer-events: none; }
+@media (max-width: 720px) { .phone { height: calc(100dvh - 32px); min-height: 600px; max-height: 860px; border-radius: 24px; } }
+.stars { position: absolute; inset: 0; pointer-events: none; opacity: .7;
+  background-image: radial-gradient(1.5px 1.5px at 12% 6%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 30% 3%, #fff 50%, transparent 51%),
+  radial-gradient(1.5px 1.5px at 72% 5%, #fff8d0 50%, transparent 51%), radial-gradient(1px 1px at 88% 12%, #fff 50%, transparent 51%),
+  radial-gradient(1px 1px at 55% 9%, #fff 50%, transparent 51%), radial-gradient(1.5px 1.5px at 20% 16%, #fff3c4 50%, transparent 51%); }
+.phone.scene .stars { display: none; }
+.app { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px; padding: 10px 16px calc(14px + env(safe-area-inset-bottom, 0px)); overflow: hidden; }
+.app.with-sheet { padding-bottom: calc(var(--peek) + 12px + env(safe-area-inset-bottom, 0px)); }
+.center { text-align: center; } .dim { color: var(--dim); } .small { font-size: 14px; } .tiny { font-size: 12px; } .spacer { flex: 1; min-height: 0; }
+.row { display: flex; gap: 8px; align-items: center; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.wrap { flex-wrap: wrap; }
+
+.btn { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52px; padding: 10px 20px; width: 100%;
+  border-radius: 999px; border: 0; cursor: pointer; font-family: var(--font-display); font-size: 18px; line-height: 1.2; transition: transform .12s; flex-shrink: 0; }
+.row > .btn { flex: 1; width: auto; min-width: 0; }
+.btn:active { transform: scale(.97); } .btn:disabled { opacity: .5; cursor: default; }
+.btn .sub { font-family: var(--font-body); font-size: 12px; opacity: .85; margin-top: 3px; }
+.gold { background: linear-gradient(180deg, #f3d892, #dcb35e); color: #3a2a10; box-shadow: 0 6px 18px rgba(232,199,122,.3); }
+.purple { background: linear-gradient(180deg, #8e70d6, #6a4cb4); color: #fff; }
+.ghost { background: rgba(10,17,48,.45); color: var(--text); border: 1.5px solid rgba(255,255,255,.3); backdrop-filter: blur(4px); }
+.icon-btn { width: 52px; min-width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.3); background: rgba(10,17,48,.5); cursor: pointer; display: grid; place-items: center; font-size: 20px; flex-shrink: 0; }
+.pulse { animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(243,216,146,.55); } 50% { box-shadow: 0 0 0 10px rgba(243,216,146,0); } }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 14px; border-radius: 999px; cursor: pointer; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.18); font-size: 15px; }
+.chip[aria-pressed="true"] { background: rgba(232,199,122,.2); border-color: var(--gold); color: var(--gold-soft); }
+.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--rose-soft); color: #5a1d33; font-family: var(--font-body); }
+input[type="text"] { width: 100%; font-family: var(--font-body); font-size: 16px; color: var(--ink); background: var(--cream); border: 2px solid transparent; border-radius: 14px; padding: 13px 14px; outline: none; }
+input[type="text"]:focus { border-color: var(--gold); }
+label.field { display: flex; flex-direction: column; gap: 6px; font-size: 15px; }
+
+.topbar { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; min-height: 44px; flex-shrink: 0; }
+.topbar h1 { font-size: 19px; text-align: center; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+.tb-btn { width: 44px; height: 44px; border: 0; background: none; cursor: pointer; font-size: 20px; display: grid; place-items: center; border-radius: 12px; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+.burger { display: grid; gap: 4px; width: 20px; } .burger i { display: block; height: 2px; border-radius: 2px; background: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+.stats { text-align: center; font-size: 13px; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.8); flex-shrink: 0; }
+.steps { text-align: center; font-size: 12px; color: var(--gold-soft); letter-spacing: .08em; text-shadow: 0 1px 6px rgba(0,0,0,.7); }
+
+/* 대림초 (이미지 + 차례로 켜지는 불꽃) */
+.advent { position: relative; width: 176px; aspect-ratio: 900 / 427; margin: 0 auto; flex-shrink: 0; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); }
+.advent.big { width: 240px; }
+.advent > img.base { width: 100%; height: 100%; }
+.advent .flame { position: absolute; transform-origin: 50% 92%; animation: flicker 2.6s ease-in-out infinite; filter: drop-shadow(0 0 6px rgba(255,190,80,.85)); }
+.advent .flame img { width: 100%; height: 100%; }
+.advent .flame:nth-of-type(2) { animation-delay: -.7s; } .advent .flame:nth-of-type(3) { animation-delay: -1.3s; } .advent .flame:nth-of-type(4) { animation-delay: -1.9s; }
+@keyframes flicker { 0%,100% { transform: rotate(-2.5deg) scaleY(1); } 30% { transform: rotate(2deg) scaleY(1.06); } 60% { transform: rotate(-1deg) scaleY(.95); } }
+
+/* 트리 캐러셀: 남은 높이를 모두 쓰고 비율 유지 */
+.trees { flex: 1; min-height: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 0 -16px; }
+.trees::-webkit-scrollbar { display: none; }
+.tree-page { flex: 0 0 100%; scroll-snap-align: center; container-type: size; display: grid; place-items: center; position: relative; }
+.stage { position: relative; width: min(92cqw, calc(100cqh * 300 / 400)); aspect-ratio: 300 / 400; }
+.stage > img.tree-img { position: absolute; left: 0; top: 10%; width: 100%; height: 90%; filter: drop-shadow(0 8px 18px rgba(0,0,0,.35)); }
+.stage.placing { cursor: crosshair; }
+.page-label { position: absolute; left: 50%; bottom: 2px; transform: translateX(-50%); font-size: 12px; color: #fff; text-shadow: 0 1px 4px #000; white-space: nowrap; }
+.tdots { display: flex; justify-content: center; gap: 2px; flex-shrink: 0; min-height: 20px; }
+.tdots button { width: 24px; height: 20px; border: 0; background: none; cursor: pointer; display: grid; place-items: center; padding: 0; }
+.tdots button::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.45); box-shadow: 0 0 3px rgba(0,0,0,.5); transition: width .2s; }
+.tdots button[aria-current="true"]::after { width: 18px; border-radius: 4px; background: var(--gold); }
+.orn { position: absolute; transform: translate(-50%, -22%); padding: 0; border: 0; background: none; cursor: pointer; aspect-ratio: 1; z-index: 2; filter: drop-shadow(0 3px 4px rgba(0,0,0,.35)); }
+.orn img { width: 100%; height: 100%; }
+.orn.dimmed { opacity: .55; pointer-events: none; }
+.orn.draft { z-index: 4; animation: drop .5s cubic-bezier(.3,1.6,.5,1) both; }
+.orn.draft::after { content: ""; position: absolute; inset: -8%; border-radius: 50%; border: 2px dashed var(--gold); animation: spin 6s linear infinite; }
+@keyframes drop { from { transform: translate(-50%, -80%) scale(.6); opacity: 0; } to { transform: translate(-50%, -22%) scale(1); opacity: 1; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+.star { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 19%; aspect-ratio: 1; z-index: 3; filter: grayscale(.7) brightness(.75) opacity(.75); transition: filter .6s; }
+.star img { width: 100%; height: 100%; }
+.star.lit { filter: drop-shadow(0 0 10px #ffe9a8) drop-shadow(0 0 22px rgba(255,220,140,.8)); animation: twinkle 3s ease-in-out infinite; }
+@keyframes twinkle { 50% { filter: drop-shadow(0 0 16px #fff3c8) drop-shadow(0 0 34px rgba(255,220,140,1)); } }
+.hint { position: absolute; left: 50%; top: 56%; transform: translate(-50%, -50%); background: rgba(10,17,48,.78); padding: 8px 14px; border-radius: 999px; font-size: 14px; pointer-events: none; white-space: nowrap; z-index: 5; }
+
+.strip { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 6px; flex-shrink: 0; scrollbar-width: none; }
+.strip::-webkit-scrollbar { display: none; }
+.strip button { flex: 0 0 58px; height: 58px; padding: 5px; border-radius: 16px; cursor: pointer; background: rgba(10,17,48,.55); border: 2.5px solid transparent; }
+.strip button[aria-pressed="true"] { border-color: var(--gold); background: rgba(232,199,122,.28); }
+.strip img { width: 100%; height: 100%; }
+
+/* 바텀 시트 (대림 달력) */
+.bsheet { position: absolute; left: 0; right: 0; bottom: 0; height: 82%; z-index: 15; background: var(--sheet); border-radius: 24px 24px 0 0; border-top: 1px solid var(--line);
+  box-shadow: 0 -10px 30px rgba(0,0,0,.35); transform: translateY(calc(100% - var(--peek) - env(safe-area-inset-bottom, 0px))); transition: transform .35s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column; touch-action: none; }
+.bsheet.open { transform: translateY(0); }
+.bsheet.dragging { transition: none; }
+.bs-handle { flex-shrink: 0; padding: 8px 16px 10px; cursor: grab; display: flex; flex-direction: column; align-items: center; gap: 6px; border: 0; background: none; width: 100%; }
+.grabber { width: 40px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.35); }
+.peek-row { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 36px; font-family: var(--font-display); font-size: 16px; }
+.peek-row .new { font-family: var(--font-body); font-size: 13px; color: var(--gold-soft); }
+.bs-body { flex: 1; min-height: 0; overflow-y: auto; padding: 0 16px calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; gap: 12px; touch-action: pan-y; }
+.cal-head, .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cal-head span { text-align: center; font-size: 12px; color: var(--dim); }
+.cal-head span:first-child { color: var(--rose); }
+.cell { aspect-ratio: 1; border-radius: 12px; background: rgba(255,255,255,.06); display: grid; place-items: center; position: relative; font-size: 12px; color: var(--dim); border: 0; padding: 0; }
+.cell.blank { background: none; }
+.cell.sun { color: var(--rose-soft); }
+.cell.got { background: rgba(232,199,122,.14); cursor: pointer; }
+.cell.got img { width: 86%; height: 86%; }
+.cell.ready { background: rgba(232,199,122,.22); color: var(--gold-soft); cursor: pointer; box-shadow: inset 0 0 0 1.5px var(--gold); font-size: 18px; }
+.cell.today-ready { animation: pulse 1.8s ease-in-out infinite; }
+.cell.sel { outline: 2px solid var(--gold); outline-offset: 1px; }
+.cell .tag { position: absolute; bottom: 1px; font-size: 9px; }
+.day-card { background: rgba(255,255,255,.06); border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.day-card img { width: 64px; height: 64px; flex: 0 0 64px; }
+
+/* 사이드 바 */
+.scrim { position: absolute; inset: 0; z-index: 25; background: rgba(6,10,30,.55); opacity: 0; pointer-events: none; transition: opacity .3s; }
+.scrim.open { opacity: 1; pointer-events: auto; }
+.drawer { position: absolute; top: 0; right: 0; bottom: 0; width: 84%; z-index: 26; background: var(--sheet); border-left: 1px solid var(--line); transform: translateX(100%); transition: transform .3s cubic-bezier(.2,.8,.2,1);
+  display: flex; flex-direction: column; gap: 14px; padding: 14px 16px calc(16px + env(safe-area-inset-bottom, 0px)); overflow-y: auto; }
+.drawer.open { transform: none; }
+.dr-section { background: rgba(255,255,255,.06); border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.gift-row { display: flex; align-items: center; justify-content: space-between; min-height: 36px; }
+.gift-row b { font-family: var(--font-display); font-weight: 400; color: var(--gold-soft); font-size: 18px; font-variant-numeric: tabular-nums; }
+.menu-item { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 6px; border: 0; background: none; cursor: pointer; text-align: left; font-size: 16px; border-bottom: 1px solid var(--line); width: 100%; }
+
+/* 배경 캐러셀 */
+.bg-carousel { flex: 1; min-height: 0; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 13%; margin: 0 -16px; scrollbar-width: none; }
+.bg-carousel::-webkit-scrollbar { display: none; }
+.bg-card { flex: 0 0 74%; height: 100%; scroll-snap-align: center; border-radius: 24px; position: relative; overflow: hidden; border: 3px solid transparent; transition: border-color .2s, transform .2s; transform: scale(.93); background-size: cover; background-position: center bottom; }
+.bg-card.active { border-color: var(--gold); transform: none; }
+.bg-card img { position: absolute; left: 18%; width: 64%; bottom: 12%; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); }
+.bg-card .name { position: absolute; left: 0; right: 0; bottom: 10px; text-align: center; font-family: var(--font-display); font-size: 17px; text-shadow: 0 1px 6px #000; }
+.dots { display: flex; justify-content: center; flex-wrap: wrap; gap: 0; flex-shrink: 0; }
+.dots button { width: 22px; height: 26px; border: 0; background: none; cursor: pointer; display: grid; place-items: center; padding: 0; }
+.dots button::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.3); transition: width .2s; }
+.dots button[aria-current="true"]::after { width: 18px; border-radius: 4px; background: var(--gold); }
+
+/* 편지지 (레퍼런스 배치: 위 보내는 이 + 장식 / 기도 / 본문 / 아래 그림 영역 비움) */
+.paper { position: relative; aspect-ratio: 914 / 1721; background-size: 100% 100%; color: var(--ink); container-type: inline-size; border-radius: 4cqw; }
+.paper .inner { position: absolute; left: 8.5%; right: 10%; top: 12.5%; bottom: 22%; display: flex; flex-direction: column; gap: 3cqw; min-height: 0; }
+.paper .from { display: flex; align-items: center; gap: 3cqw; }
+.paper .from .who small { display: block; font-size: 4.2cqw; color: #8a8a99; }
+.paper .from .who b { font-family: var(--font-display); font-weight: 400; font-size: 7.4cqw; color: #1c2152; line-height: 1.15; }
+.paper .from img { width: 15cqw; height: 15cqw; }
+.paper .prayers { font-size: 4.6cqw; color: #2b3fc4; }
+.paper .text { flex: 1; min-height: 0; overflow-y: auto; white-space: pre-wrap; font-size: 5.2cqw; line-height: 1.75; color: #1c2152; }
+.paper input.pinput { background: transparent; border: 0; border-bottom: 2px dashed rgba(31,42,92,.3); border-radius: 0; padding: 2px 0; font-family: var(--font-display); font-size: 7cqw; color: #1c2152; width: 100%; }
+.paper input.pinput:focus { border-bottom-color: var(--gold); }
+.paper textarea.ptext { flex: 1; min-height: 0; background: transparent; border: 0; outline: none; resize: none; font-family: var(--font-body); font-size: 5.2cqw; line-height: 1.75; color: #1c2152; padding: 0;
+  background-image: repeating-linear-gradient(transparent 0 calc(1.75em - 1px), rgba(31,42,92,.12) calc(1.75em - 1px) 1.75em); background-attachment: local; }
+.paper-wrap { flex: 1; min-height: 0; container-type: size; display: grid; place-items: center; }
+.paper-wrap .paper { height: min(100cqh, calc(100cqw * 1721 / 914)); }
+
+/* 모달 */
+.overlay { position: absolute; inset: 0; z-index: 30; background: rgba(6,10,30,.78); display: grid; place-items: end center; padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
+.overlay.mid { place-items: center; }
+.msheet { width: 100%; background: var(--cream); color: #2a2140; border-radius: 24px; padding: 22px 20px 18px; text-align: center; display: flex; flex-direction: column; gap: 10px; }
+.msheet .ghost { color: #2a2140; border-color: rgba(0,0,0,.15); background: rgba(0,0,0,.04); backdrop-filter: none; }
+.giftbox { position: relative; width: 140px; height: 130px; margin: 50px auto 0; }
+.giftbox .box { position: absolute; bottom: 0; left: 10px; width: 120px; height: 84px; background: var(--rose); border-radius: 10px; }
+.giftbox .box::after, .giftbox .lid::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 18px; transform: translateX(-50%); background: var(--gold); }
+.giftbox .lid { position: absolute; bottom: 80px; left: 0; width: 140px; height: 30px; background: #d9789d; border-radius: 8px; transform-origin: 10% 100%; transition: transform .6s cubic-bezier(.3,1.6,.5,1); }
+.giftbox.open .lid { transform: translateY(-30px) rotate(-28deg); }
+.giftbox .prize { position: absolute; left: 50%; bottom: 30px; width: 96px; height: 96px; transform: translate(-50%, 0) scale(.2); opacity: 0; transition: all .5s ease .3s; }
+.giftbox .prize img { width: 100%; height: 100%; }
+.giftbox.open .prize { transform: translate(-50%, -70px) scale(1); opacity: 1; }
+
+/* 편지함 */
+.cards { flex: 1; min-height: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; container-type: size; }
+.cards::-webkit-scrollbar { display: none; }
+.cards .paper { flex: 0 0 auto; height: min(100cqh, calc((100cqw - 56px) * 1721 / 914)); scroll-snap-align: center; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+
+.reveal { position: absolute; inset: 0; z-index: 40; background: radial-gradient(80% 60% at 50% 30%, #2a3a80, var(--deep)); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; gap: 12px; }
+.beam { position: absolute; top: 0; left: 50%; width: 6px; height: 0; transform: translateX(-50%); background: linear-gradient(180deg, rgba(255,240,190,0), #fff1c0); animation: beam 1.8s ease-out forwards; }
+.fstar { width: 72px; animation: fall 1.8s ease-out forwards; filter: drop-shadow(0 0 16px #ffe9a8); }
+@keyframes beam { to { height: 30%; } }
+@keyframes fall { from { transform: translateY(-200px); opacity: 0; } to { transform: none; opacity: 1; } }
+.toast { position: absolute; left: 50%; bottom: calc(var(--peek) + 84px); transform: translateX(-50%); z-index: 45; background: rgba(20,26,60,.96); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 14px; border: 1px solid var(--line); white-space: nowrap; }
+.brand { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.1); flex-shrink: 0; }
+.brand .row .btn { min-height: 44px; font-size: 15px; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="ctrl" aria-label="미리보기 조작">
+    <details id="ctrlBox" open>
+      <summary>미리보기 조작판</summary>
+      <div class="body">
+        <p>서버 없이 화면 흐름만 따라 보는 시안이에요. 데이터는 이 창에서만 유지돼요.</p>
+        <span class="lbl">서버 판정 날짜 (debugDate)</span>
+        <div class="seg" id="dateSeg"></div>
+        <span class="lbl">바로 가기</span>
+        <div class="seg" id="jumpSeg"></div>
+        <div class="seg"><button id="resetBtn" type="button">처음 상태로</button></div>
+      </div>
+    </details>
+  </aside>
+  <div class="phone" id="phone"><div class="stars" aria-hidden="true"></div><main class="app" id="app"></main><div id="layer"></div></div>
+</div>
+
+<script>
+(() => {
+const IMG = (n) => `assets/${n}.webp`;
+const BGS = [
+  ["bg0", "베들레헴 가는 길"], ["bg1", "성탄 놀이공원"], ["bg2", "남색 밤하늘"], ["bg3", "천사의 밤"], ["bg4", "눈 내린 마을"], ["bg5", "성당 스테인드글라스"],
+  ["bg6", "하늘색 눈꽃"], ["bg7", "보라 눈꽃"], ["bg8", "빨강 눈꽃"], ["bg9", "분홍 눈꽃"], ["bg10", "초록 눈꽃"],
+];
+/* 대림 달력: 날짜별 오너먼트 · 이름 · 실천 (주일은 대림초) */
+const DAILY = [
+  ["o21","대림 제1주일 · 보라 초","첫 번째 대림초를 밝혀요. 깨어 기다리는 마음으로 하루를 시작해 보세요."],
+  ["o25","기다림의 종","서두르지 않고 한 사람의 말을 끝까지 들어 보세요."],
+  ["o7","작은 등불","가족이나 동료에게 고마운 마음을 한 문장으로 전해 보세요."],
+  ["o22","솔방울","오늘 쓰지 않은 물건 하나를 나눔 상자에 넣어 보세요."],
+  ["o28","눈송이","누군가의 수고를 조용히 대신해 보세요."],
+  ["o6","올리브 가지","다툼이 있던 관계를 위해 화해의 기도를 바쳐 보세요."],
+  ["o13","노래하는 천사","오늘 만나는 이에게 먼저 웃으며 인사해 보세요."],
+  ["o5","대림 제2주일 · 연보라 초","두 번째 대림초를 밝혀요. 길을 곧게 내는 마음으로 미뤄 둔 일을 하나 마쳐 보세요."],
+  ["o18","양털 양","작은 불평 하나를 감사로 바꾸어 말해 보세요."],
+  ["o26","성모님의 백합","원죄 없이 잉태되신 성모 대축일이에요. 성모님처럼 ‘예’ 하고 응답할 일을 정해 보세요."],
+  ["o16","목자의 지팡이","길을 잃은 듯한 친구에게 안부를 물어 보세요."],
+  ["o4","성경","성경 한 구절을 천천히 소리 내어 읽어 보세요."],
+  ["o10","호랑가시나무","저녁에 오늘 하루를 조용히 돌아보세요."],
+  ["o11","장미","마음이 멀어진 이를 위해 성모송 한 번을 바쳐 보세요."],
+  ["o15","대림 제3주일 · 장미 초","기쁨의 주일이에요. 오늘 받은 기쁨 하나를 적어 보세요."],
+  ["o8","기도하는 손","묵주기도 한 단을 정성껏 바쳐 보세요."],
+  ["o23","사랑의 방울","가족에게 사랑한다고 말해 보세요."],
+  ["o14","편지 봉투","멀리 있는 이에게 짧은 안부를 보내 보세요."],
+  ["o17","평화의 비둘기","오늘 하루 말을 아끼고 더 많이 들어 보세요."],
+  ["o19","성가 음표","좋아하는 성가 한 곡을 불러 보세요."],
+  ["o2","생강빵 집","식사 전 기도를 가족과 함께 바쳐 보세요."],
+  ["o_white","대림 제4주일 · 흰 초","네 번째 대림초를 밝혀요. 아기 예수님을 맞을 마음의 자리를 비워 두세요."],
+  ["o12","동방박사의 낙타","멀리 있는 이를 위해 화살기도를 바쳐 보세요."],
+  ["o1","선물 상자","가난한 이웃을 위한 작은 봉헌을 해 보세요."],
+  ["o29","금빛 열쇠","판공성사를 준비하며 마음을 살펴 보세요."],
+  ["o20","구유 스노볼","오늘 밤, 아기 예수님을 맞을 마음을 준비해 보세요."],
+];
+/* 편지에 고를 수 있는 장식 (대림초 장식 제외) */
+const LETTER_ORN = ["o22","o11","o25","o17","o18","o13","o14","o26","o28","o6","o12","o2","o7","o10","o16","o4","o23","o27","o19","o1","o29","o9","o20","o8"];
+const GIFTS = [["rosary","묵주기도","단","📿"],["lords_prayer","주님의 기도","회","🙏"],["hail_mary","성모송","회","🌹"],["arrow_prayer","화살기도","회","✨"],["mass_intention","미사 중에 기억하기","통","⛪"],["adoration","성체조배","통","🕯️"]];
+const DATES = (() => { const o = []; const d = new Date(Date.UTC(2026,10,29)); for (let i = 0; i < 26; i++) { o.push(d.toISOString().slice(0,10)); d.setUTCDate(d.getUTCDate()+1); } return o; })();
+const SUNDAYS = ["2026-11-29","2026-12-06","2026-12-13","2026-12-20"];
+const FLAMES = [{"l":24.1,"t":9.71,"w":6.71,"h":16.95},{"l":38.97,"t":15.23,"w":6.71,"h":16.95},{"l":53.85,"t":23.46,"w":6.42,"h":16.71},{"l":68.44,"t":31.82,"w":6.59,"h":14.99}];
+const ENV = [[0.482,0.518],[0.465,0.535],[0.448,0.555],[0.431,0.572],[0.411,0.592],[0.392,0.617],[0.363,0.645],[0.324,0.682],[0.301,0.69],[0.324,0.659],[0.315,0.679],[0.287,0.707],[0.245,0.749],[0.214,0.777],[0.214,0.775],[0.259,0.735],[0.239,0.758],[0.206,0.789],[0.163,0.831],[0.132,0.865],[0.13,0.868],[0.166,0.837],[0.175,0.817],[0.146,0.842],[0.11,0.876],[0.076,0.913],[0.073,0.915],[0.11,0.879],[0.11,0.885],[0.085,0.915],[0.048,0.955],[0.017,0.989],[0.003,0.997],[0.014,0.983],[0.07,0.885],[0.144,0.856]];
+const DEMO_DATES = [["11/29 (대림 1주)","2026-11-29T12:00"],["12/6 (2주)","2026-12-06T12:00"],["12/13 (3주)","2026-12-13T12:00"],["12/20 (4주)","2026-12-20T12:00"],["12/24 23:59","2026-12-24T23:59"],["12/25 00:00 성탄","2026-12-25T00:00"]];
+const OWNER = { id: "sample-1", name: "미카엘" };
+const PER_TREE = 16; // 한 트리에 넉넉히 달 수 있는 편지 수 (넘으면 옆 트리 권장)
+
+/* 좌표계: 트리 페이지 300 x 400 (위 40은 별 자리, 트리 그림은 40~400) */
+function insideTree(x, y) {
+  const ty = (y - 40) / 360; if (ty < 0.08 || ty > 0.86) return false;
+  const e = ENV[Math.floor(ty * 40)]; if (!e) return false;
+  const fx = x / 300; return fx >= e[0] + 0.05 && fx <= e[1] - 0.05;
+}
+
+function initial() {
+  const L = [
+    { o: "o22", p: 0, x: 120, y: 150, paper: 1, s: "마리아", b: "미카엘 형제님, 기쁜 성탄 맞이하세요! 늘 기도 안에서 기억할게요.", g: ["rosary","hail_mary"], r: 5 },
+    { o: "o17", p: 0, x: 190, y: 225, paper: 2, s: "요셉", b: "올 한 해 고마웠어요. 아기 예수님의 평화가 함께하길.", g: ["mass_intention"], r: 0 },
+    { o: "o11", p: 0, x: 95, y: 300, paper: 3, s: "안나", b: "성탄 축하드려요 🎄", g: [], r: 0 },
+    { o: "o25", p: 0, x: 200, y: 330, paper: 4, s: "베드로", b: "함께 대림을 걸어 기뻤습니다. 건강하세요.", g: ["rosary","lords_prayer","adoration"], r: 3 },
+  ];
+  return {
+    now: "2026-12-13T12:00", screen: "home", member: null, prefill: "",
+    trees: { t1: { id: "t1", owner: "미카엘", ownerId: OWNER.id, bg: 0, christmasSeen: false,
+      daily: DATES.slice(0,7).concat(["2026-12-10"]), invited: 1, letters: L, visits: ["2026-12-11","2026-12-12"] } },
+    viewTree: "t1", sheetOpen: false, drawer: false, modal: null, toast: "", selDay: null, page: 0,
+  };
+}
+let S = initial();
+
+const today = () => S.now.slice(0,10);
+const nowD = () => new Date(S.now + ":00+09:00");
+const OPEN = new Date("2026-12-25T00:00:00+09:00");
+const phase = () => { const n = nowD(), t = today();
+  return { today: t, collectOpen: n >= new Date("2026-11-29T00:00:00+09:00") && n < OPEN, before: n < OPEN,
+    days: Math.max(0, Math.ceil((OPEN - n) / 864e5)), lit: SUNDAYS.filter(d => d <= t).length }; };
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const md = (d) => `${+d.slice(5,7)}/${+d.slice(8,10)}`;
+const img = (n, alt = "", cls = "") => `<img src="${IMG(n)}" alt="${esc(alt)}" ${cls ? `class="${cls}"` : ""} loading="lazy" draggable="false">`;
+const dailyOf = (d) => DAILY[DATES.indexOf(d)];
+const isOwner = (t) => S.member && S.member.id === t.ownerId;
+const tree = () => S.trees[S.viewTree];
+const myTree = () => S.member && Object.values(S.trees).find(t => t.ownerId === S.member.id);
+const bgUrl = (i) => `url(${IMG(BGS[i][0])})`;
+
+function go(screen, extra = {}) { Object.assign(S, { screen, modal: null, drawer: false, sheetOpen: false }, extra); render(); }
+let toastTimer;
+function toast(m) { S.toast = m; renderLayer(); clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = ""; renderLayer(); }, 2200); }
+
+/* ── 공통 조각 ── */
+function advent(big = false) {
+  const p = phase();
+  return `<div class="advent ${big ? "big" : ""}" role="img" aria-label="대림초 ${p.lit}개 켜짐">
+    <img class="base" src="${IMG("candles_base")}" alt="" draggable="false">
+    ${FLAMES.slice(0, p.lit).map((f, i) => `<span class="flame" style="left:${f.l}%;top:${f.t}%;width:${f.w}%;height:${f.h}%"><img src="${IMG("flame" + i)}" alt=""></span>`).join("")}
+  </div>`;
+}
+const backBtn = (act, label = "뒤로") => `<button class="tb-btn" data-act="${act}" type="button" aria-label="${label}">←</button>`;
+const burger = () => `<button class="tb-btn" data-act="drawer" type="button" aria-label="메뉴 열기"><span class="burger"><i></i><i></i><i></i></span></button>`;
+const pos = (x, y) => `left:${x/300*100}%;top:${y/400*100}%`;
+
+function pageCount(t, extraEmpty) {
+  const used = t.letters.length ? Math.max(...t.letters.map(l => l.p)) + 1 : 1;
+  const lastFull = t.letters.filter(l => l.p === used - 1).length >= PER_TREE * 0.6;
+  return used + (extraEmpty || lastFull ? 1 : 0);
+}
+
+/** 트리 캐러셀: 이웃의 편지 오너먼트만 달림 (보낸 이가 고른 트리·자리) */
+function trees(t, { placing = false, draft = null } = {}) {
+  const n = pageCount(t, placing);
+  const star = t.daily.length >= 26;
+  let pages = "";
+  for (let p = 0; p < n; p++) {
+    const ls = t.letters.map((l, i) => ({ ...l, i })).filter(l => l.p === p);
+    const size = ls.length <= 8 ? 15 : ls.length <= 16 ? 12.5 : 10;
+    let h = `<div class="tree-page" data-page="${p}"><div class="stage ${placing ? "placing" : ""}" data-stage="${p}">
+      <img class="tree-img" src="${IMG("tree")}" alt="" draggable="false">
+      ${p === 0 ? `<div class="star ${star ? "lit" : ""}" aria-label="${star ? "베들레헴의 별이 빛나요" : "아직 빛나지 않는 별"}">${img("o9")}</div>` : ""}`;
+    ls.forEach(l => { h += `<button type="button" class="orn ${placing ? "dimmed" : ""}" data-letter="${l.i}" style="${pos(l.x,l.y)};width:${size}%" aria-label="이웃이 남긴 편지">${img(l.o)}</button>`; });
+    if (draft && draft.x != null && draft.p === p) h += `<div class="orn draft" style="${pos(draft.x, draft.y)};width:15%">${img(draft.o)}</div>`;
+    if (placing && (!draft || draft.x == null)) h += `<div class="hint">${ls.length >= PER_TREE ? "이 트리는 꽉 찼어요. 옆으로 넘겨 보세요 →" : "달고 싶은 곳을 눌러 주세요"}</div>`;
+    if (!placing && ls.length === 0) h += `<div class="hint">${p === 0 ? "아직 달린 편지가 없어요" : "빈 트리예요. 여기에도 편지를 달 수 있어요"}</div>`;
+    h += `</div>${n > 1 ? `<span class="page-label">트리 ${p + 1} · 편지 ${ls.length}통</span>` : ""}</div>`;
+    pages += h;
+  }
+  const dots = n > 1 ? `<div class="tdots">${Array.from({ length: n }, (_, i) => `<button type="button" data-tdot="${i}" aria-label="트리 ${i + 1}" aria-current="${i === S.page}"></button>`).join("")}</div>` : "";
+  return `<div class="trees" id="trees">${pages}</div>${dots}`;
+}
+function giftSummary(t) {
+  return GIFTS.map(([id, label, unit, e]) => ({ id, label, unit, e, v: id === "rosary" ? t.letters.reduce((a,l) => a + (l.g.includes("rosary") ? l.r : 0), 0) : t.letters.filter(l => l.g.includes(id)).length })).filter(x => x.v > 0);
+}
+const prayerText = (l) => GIFTS.filter(([id]) => l.g.includes(id)).map(([id,label,,e]) => `${e} ${id === "rosary" ? `${label} ${l.r}단` : label}`).join(" · ");
+function streak(t) { const set = new Set(t.visits); let n = 0; const d = new Date(today() + "T00:00:00Z"); while (set.has(d.toISOString().slice(0,10))) { n++; d.setUTCDate(d.getUTCDate()-1); } return n; }
+function collectState(t) {
+  const p = phase(), got = new Set(t.daily);
+  return { got, todayAvail: p.collectOpen && DATES.includes(p.today) && !got.has(p.today),
+    canTake: (d) => p.collectOpen && d <= p.today && !got.has(d) }; // 지난 날짜도 받을 수 있고, 따로 표시하지 않음
+}
+function paperHtml(l, inner) { return `<article class="paper" style="background-image:url(${IMG("paper" + l.paper)})"><div class="inner">${inner}</div></article>`; }
+
+/* ── 화면 ── */
+const screens = {
+  home() {
+    return `<div class="spacer"></div>
+      <section class="stack center" style="gap:14px">
+        ${advent(true)}
+        <img src="${IMG("tree")}" alt="" style="width:130px;margin:0 auto">
+        <h1 style="font-size:32px;color:var(--gold-soft)">나의 성탄 트리 꾸미기</h1>
+        <p class="dim">매일 새로운 장식을 모으고, 이웃에게 편지와 기도를 전해 보세요</p>
+      </section><div class="spacer"></div>
+      <section class="stack">
+        ${myTree() ? `<button class="btn gold" data-act="mytree" type="button">내 성탄 트리 보러 가기</button>`
+          : `<button class="btn gold" data-act="start" type="button">cpbc플러스로 시작하기</button><button class="btn ghost" data-act="signup" type="button">회원가입</button>`}
+      </section>
+      <div class="brand"><span class="display" style="font-size:18px;color:var(--gold-soft)">cpbc플러스</span>
+        <div class="row" style="width:100%"><button class="btn ghost" type="button">App Store</button><button class="btn ghost" type="button">Google Play</button></div></div>`;
+  },
+  login() {
+    return `<div class="topbar">${backBtn("home")}<h1>${S.loginMode === "signup" ? "회원가입" : "로그인"}</h1><span></span></div>
+      <span class="badge" style="align-self:flex-start">개발용 테스트 화면</span>
+      <p class="dim small">세례명을 입력하면 새 테스트 회원 ID가 만들어져요. 실제 운영에서는 cpbc플러스 페이지에 다녀온 뒤 이 자리로 돌아와요.</p>
+      <form class="stack" id="loginForm">
+        <label class="field" for="loginName">세례명<input type="text" id="loginName" maxlength="20" placeholder="예) 마리아, 미카엘" value="${esc(S.prefill || "프란치스코")}" required></label>
+        <button class="btn gold" type="submit">계속하기</button>
+      </form>
+      <div class="spacer"></div>
+      <button class="btn ghost" data-act="asOwner" type="button">샘플 계정 ‘미카엘’로 들어가기</button>`;
+  },
+  create() {
+    const d = S.draft;
+    return `<div class="topbar">${backBtn("home")}<h1>나의 성탄 트리 만들기</h1><span></span></div>
+      ${d.ref ? `<p class="small center" style="color:var(--rose-soft)">💌 미카엘님의 초대로 오셨네요</p>` : ""}
+      <label class="field" for="treeName">세례명<input type="text" id="treeName" maxlength="20" value="${esc(d.name)}" placeholder="예) 마리아, 미카엘"></label>
+      <p class="small dim center">옆으로 넘겨 배경을 골라 주세요 · ${BGS.length}가지</p>
+      <div class="bg-carousel" id="bgCar">${BGS.map((b, i) => `<div class="bg-card ${i === d.bg ? "active" : ""}" style="background-image:${bgUrl(i)}"><img src="${IMG("tree")}" alt=""><span class="name">${b[1]}</span></div>`).join("")}</div>
+      <div class="dots">${BGS.map((b, i) => `<button type="button" data-dot="${i}" aria-label="${b[1]}" aria-current="${i === d.bg}"></button>`).join("")}</div>
+      <button class="btn gold" data-act="createTree" type="button">이 배경으로 트리 만들기</button>`;
+  },
+  tree() { const t = tree(); return isOwner(t) ? ownerTree(t) : publicTree(t); },
+
+  place() {
+    const t = tree(), w = S.write;
+    return `<div class="topbar">${backBtn("tree")}<h1>${esc(t.owner)}님께 편지 남기기</h1><span></span></div>
+      <p class="steps">1 / 3 · 장식을 고르고 원하는 곳에 달아 주세요</p>
+      ${trees(t, { placing: true, draft: w })}
+      <div class="strip" aria-label="장식 고르기">${LETTER_ORN.map(o => `<button type="button" data-orn="${o}" aria-pressed="${w.o === o}" aria-label="장식">${img(o)}</button>`).join("")}</div>
+      <button class="btn gold" data-act="toPrayer" type="button" ${w.x == null ? "disabled" : ""}>${w.x == null ? "트리에 달 자리를 골라 주세요" : "여기에 달게요"}</button>`;
+  },
+  prayer() {
+    const w = S.write;
+    return `<div class="topbar">${backBtn("place")}<h1>기도도 함께 전할까요?</h1><span></span></div>
+      <p class="steps">2 / 3</p>
+      <img src="${IMG(w.o)}" alt="" style="width:88px;margin:8px auto 4px">
+      <p class="small dim center">여러 개 고를 수 있고, 고르지 않아도 편지를 보낼 수 있어요</p>
+      <div class="row wrap" style="justify-content:center">${GIFTS.map(([id,label,,e]) => `<button type="button" class="chip" data-gift="${id}" aria-pressed="${w.g.includes(id)}">${e} ${label}</button>`).join("")}</div>
+      ${w.g.includes("rosary") ? `<p class="small center" style="margin-top:6px">묵주기도 몇 단을 바칠까요?</p><div class="row wrap" style="justify-content:center">${[1,2,3,4,5].map(n => `<button type="button" class="chip" data-rosary="${n}" aria-pressed="${w.r === n}" style="min-width:52px;justify-content:center">${n}단</button>`).join("")}</div>` : ""}
+      <div class="spacer"></div>
+      <button class="btn gold" data-act="toLetter" type="button">${w.g.length ? "다음" : "기도 없이 편지만 쓸게요"}</button>`;
+  },
+  letter() {
+    const w = S.write, len = [...w.body].length, pt = prayerText({ g: w.g, r: w.r });
+    return `<div class="topbar">${backBtn("prayer")}<h1>편지 쓰기</h1><span></span></div>
+      <p class="steps">3 / 3 · <span id="cnt">${len}/850</span></p>
+      <div class="paper-wrap">${paperHtml(w, `
+        <div class="from"><label class="who" for="sender" style="flex:1;min-width:0"><small>보내는 이</small><input class="pinput" type="text" id="sender" maxlength="20" value="${esc(w.s)}" placeholder="세례명"></label>${img(w.o)}</div>
+        ${pt ? `<p class="prayers">${pt}</p>` : ""}
+        <textarea class="ptext" id="letterBody" maxlength="850" aria-label="편지 내용" placeholder="성탄을 기다리는 이웃에게 따뜻한 마음을 전해 보세요">${esc(w.body)}</textarea>`)}</div>
+      ${w.err ? `<p class="small center" style="color:var(--rose)" role="alert">${w.err}</p>` : ""}
+      <button class="btn gold" data-act="send" type="button">편지 보내기</button>`;
+  },
+  sent() {
+    const t = tree(), x = S.sent, p = phase();
+    const g = GIFTS.filter(([id]) => x.g.includes(id)).map(([id,label]) => id === "rosary" ? `${label} ${x.r}단` : label);
+    return `<div class="spacer"></div>
+      <img src="${IMG(x.o)}" alt="" style="width:120px;margin:0 auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))">
+      <h1 class="center" style="font-size:24px;color:var(--gold-soft)">${esc(t.owner)}님의 트리에 편지가 걸렸어요</h1>
+      <p class="dim center">${p.before ? "아기 예수님이 오시는 날, 12월 25일에 편지가 열려요" : "받는 분이 지금 바로 편지를 열어볼 수 있어요"}</p>
+      <p class="small center" style="background:rgba(255,255,255,.07);border-radius:16px;padding:12px">${g.length ? `함께 전한 기도: <b style="color:var(--gold-soft)">${g.join(" · ")}</b>` : "따뜻한 편지를 전했어요"}</p>
+      <div class="spacer"></div>
+      <button class="btn gold" data-act="makeFromLetter" type="button">나도 나의 성탄 트리 만들기${p.collectOpen ? `<span class="sub">대림 시기 동안 매일 새로운 오너먼트를 모아보세요</span>` : ""}</button>
+      <button class="btn ghost" data-act="tree" type="button">${esc(t.owner)}님의 트리로 돌아가기</button>`;
+  },
+  letters() {
+    const t = tree(), p = phase();
+    const lock = (icon, title, sub) => `<div class="topbar">${backBtn("tree")}<h1>성탄 편지함</h1><span></span></div><div class="spacer"></div>
+      <div class="center stack"><div style="font-size:48px">${icon}</div><h2 style="font-size:22px">${title}</h2>${sub ? `<p class="dim">${sub}</p>` : ""}</div><div class="spacer"></div>
+      <button class="btn ghost" data-act="tree" type="button">트리로 돌아가기</button>`;
+    if (!isOwner(t)) return lock("💌", "편지는 트리 주인만 열어볼 수 있어요");
+    if (p.before) return lock("💌", "이웃이 남긴 편지예요. 12월 25일에 열려요", `성탄까지 <b>${p.days}일</b> 남았어요`);
+    const L = t.letters;
+    if (!L.length) return lock("📭", "아직 도착한 편지가 없어요", "성탄의 기쁨을 이웃과 나눠 보세요");
+    return `<div class="topbar">${backBtn("tree")}<h1>성탄 편지함</h1><span></span></div>
+      <p class="center small dim" id="cardIdx">1 / ${L.length}</p>
+      <div class="cards" id="cards">${L.map(l => paperHtml(l, `
+        <div class="from"><div class="who"><small>보내는 이</small><b>${esc(l.s)}</b></div>${img(l.o)}</div>
+        ${l.g.length ? `<p class="prayers">${prayerText(l)}</p>` : ""}
+        <div class="text">${esc(l.b)}</div>`)).join("")}</div>
+      <button class="btn purple" type="button" style="min-height:44px;font-size:15px">⛪ cpbc플러스 성탄 미사 보기</button>`;
+  },
+};
+
+function ownerTree(t) {
+  const p = phase();
+  if (!t.visits.includes(p.today)) t.visits.push(p.today);
+  const cs = collectState(t), hasLetters = t.letters.length > 0;
+  if (!p.before && !t.christmasSeen) { t.christmasSeen = true; S.modal = { type: "reveal" }; }
+  let primary;
+  if (!p.before && hasLetters) primary = `<button class="btn gold pulse" data-act="letters" type="button">💌 이웃의 편지 열어보기</button>`;
+  else if (cs.todayAvail) primary = `<button class="btn gold pulse" data-collect="${p.today}" type="button">🎁 오늘의 오너먼트 받기</button>`;
+  else primary = `<button class="btn ghost" data-act="share" type="button">트리 공유하고 편지 받기</button>`;
+  return `<div class="topbar">${backBtn("home", "처음으로")}<h1>${esc(t.owner)}님의 성탄 트리</h1>${burger()}</div>
+    ${advent()}
+    <p class="stats">대림 여정 ${t.daily.length}/26 · 연속 방문 ${streak(t)}일 · 이웃의 편지 ${t.letters.length}통</p>
+    ${trees(t)}
+    <div class="row">${primary}<button class="icon-btn" data-act="share" type="button" aria-label="트리 공유하기">↗</button></div>`;
+}
+function publicTree(t) {
+  return `<div class="topbar">${backBtn("home", "처음으로")}<h1>${esc(t.owner)}님의 성탄 트리</h1>${burger()}</div>
+    ${advent()}
+    <p class="stats">이웃의 편지 ${t.letters.length}통</p>
+    ${trees(t)}
+    <button class="btn gold" data-act="write" type="button">✉️ 편지 남기기</button>
+    <button class="btn ghost" data-act="makeFromVisit" type="button" style="min-height:44px;font-size:15px">나도 나의 성탄 트리 만들기</button>`;
+}
+
+/* 바텀 시트: 대림 달력 */
+function calendarSheet(t) {
+  const p = phase(), cs = collectState(t);
+  const sel = S.selDay || (cs.got.has(p.today) ? p.today : [...t.daily].sort().pop());
+  const lead = new Date(DATES[0] + "T00:00:00Z").getUTCDay();
+  const cells = Array(lead).fill(`<span class="cell blank"></span>`).concat(DATES.map(d => {
+    const got = cs.got.has(d), take = cs.canTake(d), sun = SUNDAYS.includes(d) ? "sun" : "";
+    if (got) return `<button type="button" class="cell got ${d === sel ? "sel" : ""}" data-day="${d}" aria-label="${md(d)} ${dailyOf(d)[1]}">${img(dailyOf(d)[0])}</button>`;
+    if (take) return `<button type="button" class="cell ready ${d === p.today ? "today-ready" : ""}" data-collect="${d}" aria-label="${md(d)} 오너먼트 받기">🎁<span class="tag">${d === p.today ? "오늘" : md(d)}</span></button>`;
+    return `<span class="cell ${sun}">${d > p.today ? "🔒" : md(d)}</span>`;
+  }));
+  const info = sel && dailyOf(sel);
+  const newCount = DATES.filter(cs.canTake).length;
+  return `<div class="bsheet ${S.sheetOpen ? "open" : ""}" id="bsheet" aria-label="대림 달력">
+    <button class="bs-handle" id="bsHandle" type="button" aria-expanded="${S.sheetOpen}"><span class="grabber"></span>
+      <span class="peek-row"><span>🗓 대림 달력 ${t.daily.length}/26</span><span class="new">${newCount ? `받을 오너먼트 ${newCount}개` : p.collectOpen ? "오늘 몫을 받았어요" : "수집 기간이 끝났어요"}</span></span></button>
+    <div class="bs-body">
+      <div class="cal-head">${["일","월","화","수","목","금","토"].map(x => `<span>${x}</span>`).join("")}</div>
+      <div class="cal">${cells.join("")}</div>
+      ${info ? `<div class="day-card"><div class="row" style="gap:12px">${img(info[0])}<div><p class="tiny dim">${+sel.slice(5,7)}월 ${+sel.slice(8)}일의 오너먼트</p><h3 style="font-size:19px">${info[1]}</h3></div></div>
+        <p class="small">${info[2]}</p><button class="btn purple" type="button" style="min-height:44px;font-size:15px">오늘의 추천 콘텐츠</button></div>`
+      : `<div class="day-card center"><p class="small dim">첫 오너먼트를 받아 보세요</p></div>`}
+      <p class="tiny dim center">주일에는 대림초 오너먼트가 와요. 26개를 모두 모으면 트리 꼭대기 별이 빛나요</p>
+    </div></div>`;
+}
+function drawer(t) {
+  const p = phase(), own = isOwner(t);
+  let inner = `<div class="row" style="justify-content:space-between"><h2 style="font-size:20px">${own ? "내 트리 메뉴" : "메뉴"}</h2><button class="tb-btn" data-act="closeDrawer" type="button" aria-label="메뉴 닫기">✕</button></div>`;
+  if (own) {
+    const g = giftSummary(t);
+    inner += `<section class="dr-section"><h3 style="font-size:18px">💐 나에게 온 영적 꽃다발</h3>
+      ${g.length ? g.map(x => `<div class="gift-row"><span>${x.e} ${x.label}</span><b>${x.v}${x.unit}</b></div>`).join("") + `<p class="tiny dim">이웃들이 편지와 함께 바친 기도예요. 누가 보냈는지는 성탄에 편지를 열면 알 수 있어요.</p>`
+        : `<p class="small dim">아직 도착한 영적 선물이 없어요. 트리를 이웃에게 공유해 보세요.</p>`}</section>
+      ${t.invited ? `<section class="dr-section"><p class="small" style="color:var(--rose-soft)">내 트리 덕분에 이웃 ${t.invited}명이 성탄 트리를 만들었어요</p></section>` : ""}
+      <nav><button class="menu-item" data-act="letters" type="button">📮 성탄 편지함 ${p.before ? `<span class="dim small">D-${p.days}</span>` : ""}</button>
+        <button class="menu-item" data-act="openCal" type="button">🗓 대림 달력</button>
+        <button class="menu-item" data-act="share" type="button">💬 카카오톡으로 공유</button>
+        <button class="menu-item" data-act="copy" type="button">🔗 링크 복사</button>
+        <button class="menu-item" data-act="home" type="button">🏠 처음으로</button></nav>`;
+  } else {
+    inner += `<nav><button class="menu-item" data-act="write" type="button">✉️ 편지 남기기</button>
+      <button class="menu-item" data-act="makeFromVisit" type="button">🎄 나도 나의 성탄 트리 만들기</button>
+      <button class="menu-item" data-act="home" type="button">🏠 처음으로</button></nav>`;
+  }
+  return `<div class="scrim ${S.drawer ? "open" : ""}" data-act="closeDrawer"></div><aside class="drawer ${S.drawer ? "open" : ""}" aria-label="메뉴" aria-hidden="${!S.drawer}">${inner}</aside>`;
+}
+function modalHtml() {
+  const m = S.modal; if (!m) return "";
+  const p = phase(), t = tree();
+  if (m.type === "reveal") return `<div class="reveal" role="dialog" aria-modal="true"><div class="beam"></div><img class="fstar" src="${IMG("o9")}" alt="">
+      <img src="${IMG("o20")}" alt="" style="width:150px">
+      <h2 style="font-size:24px;color:var(--gold-soft)">아기 예수님이 오셨어요. 이웃의 편지가 열렸어요</h2>
+      <div class="stack" style="width:100%">${t.letters.length ? `<button class="btn gold" data-act="letters" type="button">이웃의 편지 열어보기</button>` : ""}<button class="btn ghost" data-act="closeModal" type="button">트리 보기</button></div></div>`;
+  if (m.type === "gift") {
+    const info = dailyOf(m.date);
+    return `<div class="overlay mid" role="dialog" aria-modal="true"><div class="msheet"><div class="giftbox ${m.open ? "open" : ""}"><div class="box"></div><div class="lid"></div><div class="prize">${img(info[0])}</div></div>
+      ${m.open ? `<h3>${info[1]}</h3><p class="small">${info[2]}</p><p class="tiny" style="opacity:.6">대림 달력에 담았어요</p>` : `<p>상자를 여는 중…</p>`}</div></div>`;
+  }
+  let inner = "";
+  if (m.type === "letter") {
+    const l = t.letters[m.i];
+    inner = `<img src="${IMG(l.o)}" alt="" style="width:88px;margin:0 auto">`;
+    inner += p.before ? `<h3>이웃이 남긴 편지예요. 12월 25일에 열려요</h3><p class="small">성탄까지 <b>${p.days}일</b> 남았어요</p>`
+      : `<h3>이웃이 남긴 편지예요</h3><p class="small">편지는 트리 주인만 열어볼 수 있어요</p>`;
+  }
+  return `<div class="overlay" data-act="closeModal" role="dialog" aria-modal="true"><div class="msheet" data-stop>${inner}<button class="btn ghost" data-act="closeModal" type="button">닫기</button></div></div>`;
+}
+
+/* ── 렌더 ── */
+function render() {
+  const app = document.getElementById("app"), phone = document.getElementById("phone");
+  const t = tree();
+  const scene = ["tree", "place"].includes(S.screen) && t;
+  phone.classList.toggle("scene", !!scene);
+  phone.style.backgroundImage = scene ? bgUrl(t.bg) : "";
+  app.innerHTML = screens[S.screen]();
+  app.classList.toggle("with-sheet", S.screen === "tree" && t && isOwner(t));
+  renderLayer(); renderCtrl();
+  const tr = document.getElementById("trees");
+  if (tr) {
+    const pg = Math.min(S.page, tr.children.length - 1);
+    tr.scrollLeft = pg * tr.clientWidth;
+    let tm; tr.addEventListener("scroll", () => { clearTimeout(tm); tm = setTimeout(() => {
+      S.page = Math.round(tr.scrollLeft / tr.clientWidth);
+      document.querySelectorAll("[data-tdot]").forEach((d, i) => d.setAttribute("aria-current", i === S.page)); }, 80); });
+  }
+  if (S.screen === "letters") {
+    const c = document.getElementById("cards");
+    if (c) {
+      const w = () => c.firstElementChild.offsetWidth + 12;
+      c.addEventListener("scroll", () => { document.getElementById("cardIdx").textContent = `${Math.round(c.scrollLeft / w()) + 1} / ${c.children.length}`; });
+      if (S.jumpCard != null) { const j = S.jumpCard; S.jumpCard = null; requestAnimationFrame(() => { c.scrollLeft = c.children[j].offsetLeft - 16; }); }
+    }
+  }
+  if (S.screen === "create") wireCarousel();
+}
+function renderLayer() {
+  const t = tree(), layer = document.getElementById("layer");
+  const ownerView = S.screen === "tree" && t && isOwner(t);
+  layer.innerHTML = (ownerView ? calendarSheet(t) : "") + (S.screen === "tree" ? drawer(t) : "") + modalHtml() + (S.toast ? `<div class="toast" role="status">${S.toast}</div>` : "");
+  if (ownerView) wireSheet();
+}
+function renderCtrl() {
+  document.getElementById("dateSeg").innerHTML = DEMO_DATES.map(([l,v]) => `<button type="button" data-date="${v}" aria-pressed="${S.now === v}">${l}</button>`).join("");
+  const jumps = [["home","시작 화면"],["visit","이웃으로 방문"],["asOwnerTree","주인으로 보기"],["fill","편지 20통 채워 보기"]];
+  document.getElementById("jumpSeg").innerHTML = jumps.map(([a,l]) => `<button type="button" data-jump="${a}">${l}</button>`).join("");
+}
+function wireSheet() {
+  const sh = document.getElementById("bsheet"), h = document.getElementById("bsHandle");
+  let y0 = null, base = 0, moved = 0;
+  const closedY = () => sh.offsetHeight - h.offsetHeight - 6;
+  h.addEventListener("pointerdown", (e) => { y0 = e.clientY; moved = 0; base = S.sheetOpen ? 0 : closedY(); sh.classList.add("dragging"); h.setPointerCapture(e.pointerId); });
+  h.addEventListener("pointermove", (e) => { if (y0 == null) return; moved = e.clientY - y0; sh.style.transform = `translateY(${Math.min(closedY(), Math.max(0, base + moved))}px)`; });
+  const end = () => { if (y0 == null) return; sh.classList.remove("dragging"); sh.style.transform = "";
+    S.sheetOpen = Math.abs(moved) < 6 ? !S.sheetOpen : base + moved < closedY() * 0.6;
+    y0 = null; sh.classList.toggle("open", S.sheetOpen); h.setAttribute("aria-expanded", S.sheetOpen); };
+  h.addEventListener("pointerup", end); h.addEventListener("pointercancel", end);
+}
+function setSheet(open) { S.sheetOpen = open; document.getElementById("bsheet")?.classList.toggle("open", open); }
+function setDrawer(open) { S.drawer = open; document.querySelector(".drawer")?.classList.toggle("open", open); document.querySelector(".scrim")?.classList.toggle("open", open); }
+function wireCarousel() {
+  const car = document.getElementById("bgCar");
+  requestAnimationFrame(() => { const c = car.children[S.draft.bg]; car.scrollLeft = c.offsetLeft - (car.clientWidth - c.offsetWidth) / 2; });
+  let tmr;
+  car.addEventListener("scroll", () => { clearTimeout(tmr); tmr = setTimeout(() => {
+    const mid = car.scrollLeft + car.clientWidth / 2; let best = 0, bd = 1e9;
+    [...car.children].forEach((c, i) => { const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = i; } });
+    if (best !== S.draft.bg) { syncInputs(); S.draft.bg = best;
+      [...car.children].forEach((c, i) => c.classList.toggle("active", i === best));
+      document.querySelectorAll("[data-dot]").forEach((d, i) => d.setAttribute("aria-current", i === best)); }
+  }, 90); });
+}
+function syncInputs() {
+  const n = document.getElementById("treeName"); if (n && S.draft) S.draft.name = n.value;
+  const s = document.getElementById("sender"); if (s && S.write) S.write.s = s.value;
+  const b = document.getElementById("letterBody"); if (b && S.write) S.write.body = b.value;
+}
+function collect(date) {
+  if (S.modal) return;
+  const t = tree();
+  if (!isOwner(t) || !collectState(t).canTake(date)) return;
+  t.daily.push(date); t.daily.sort();
+  S.selDay = date;
+  S.modal = { type: "gift", date, open: false }; renderLayer();
+  setTimeout(() => { S.modal.open = true; renderLayer(); }, 350);
+  setTimeout(() => { S.modal = null; S.sheetOpen = true; render(); if (t.daily.length >= 26) toast("베들레헴의 별이 빛나요 ⭐"); }, 2400);
+}
+
+document.addEventListener("click", (e) => {
+  const stageEl = e.target.closest(".stage.placing");
+  if (stageEl && S.screen === "place") {
+    const r = stageEl.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width * 300, y = (e.clientY - r.top) / r.height * 400;
+    if (!insideTree(x, y)) return toast("트리 안쪽을 눌러 주세요");
+    Object.assign(S.write, { x: Math.round(x), y: Math.round(y), p: +stageEl.dataset.stage }); return render();
+  }
+  const el = e.target.closest("button, [data-act]");
+  if (!el || !document.querySelector(".shell").contains(el)) return;
+  if (!e.target.closest("button") && e.target.closest("[data-stop]")) return;
+  syncInputs();
+  const d = el.dataset;
+  if (d.date) { S.now = d.date; return render(); }
+  if (d.jump) {
+    if (d.jump === "home") return go("home");
+    if (d.jump === "visit") return go("tree", { viewTree: "t1", page: 0, member: S.member && S.member.id === OWNER.id ? null : S.member });
+    if (d.jump === "asOwnerTree") return go("tree", { viewTree: "t1", page: 0, member: OWNER });
+    if (d.jump === "fill") { const t = S.trees.t1; const names = ["루치아","바오로","모니카","스테파노","아녜스","토마스","가타리나","프란치스코","데레사","안드레아"];
+      while (t.letters.length < 20) { let x, y; do { x = 30 + Math.random() * 240; y = 80 + Math.random() * 280; } while (!insideTree(x, y));
+        t.letters.push({ o: LETTER_ORN[t.letters.length % LETTER_ORN.length], p: 0, x, y, paper: 1 + (t.letters.length % 4), s: names[t.letters.length % 10], b: "기쁜 성탄 보내세요!", g: ["hail_mary"], r: 0 }); }
+      return go("tree", { viewTree: "t1", page: 0 }); }
+  }
+  if (d.collect) return collect(d.collect);
+  if (d.day) { S.selDay = d.day; return renderLayer(); }
+  if (d.letter !== undefined) {
+    if (isOwner(tree()) && !phase().before) return go("letters", { jumpCard: +d.letter });
+    S.modal = { type: "letter", i: +d.letter }; return renderLayer();
+  }
+  if (d.tdot !== undefined) { const tr = document.getElementById("trees"); tr.scrollTo({ left: +d.tdot * tr.clientWidth, behavior: "smooth" }); return; }
+  if (d.dot !== undefined) { const car = document.getElementById("bgCar"), c = car.children[+d.dot]; car.scrollTo({ left: c.offsetLeft - (car.clientWidth - c.offsetWidth) / 2, behavior: "smooth" }); return; }
+  if (d.orn) { S.write.o = d.orn; return render(); }
+  if (d.gift) { const g = S.write.g; const i = g.indexOf(d.gift); i >= 0 ? g.splice(i,1) : g.push(d.gift); return render(); }
+  if (d.rosary) { S.write.r = +d.rosary; return render(); }
+  const startCreate = (ref) => {
+    S.afterLogin = { ref };
+    if (!S.member) return go("login");
+    const mine = myTree(); if (mine) return go("tree", { viewTree: mine.id, page: 0 });
+    go("create", { draft: { name: S.prefill || S.member.name, bg: 0, ref } });
+  };
+  switch (d.act) {
+    case "home": return go("home");
+    case "start": S.loginMode = "login"; return startCreate(null);
+    case "signup": S.loginMode = "signup"; return startCreate(null);
+    case "mytree": return go("tree", { viewTree: myTree().id, page: 0 });
+    case "asOwner": S.member = OWNER; return go("tree", { viewTree: "t1", page: 0 });
+    case "tree": return go("tree");
+    case "drawer": return setDrawer(true);
+    case "closeDrawer": return setDrawer(false);
+    case "openCal": setDrawer(false); return setSheet(true);
+    case "write": return go("place", { write: { o: LETTER_ORN[0], x: null, y: null, p: 0, g: [], r: 1, s: S.member ? S.member.name : "", body: "", err: "", paper: 1 + Math.floor(Math.random() * 4) } });
+    case "place": return go("place");
+    case "toPrayer": case "prayer": return go("prayer");
+    case "toLetter": return go("letter");
+    case "send": {
+      const w = S.write;
+      if (w.sending) return;
+      if (!w.s.trim()) { w.err = "보내는 이 세례명을 입력해 주세요"; return render(); }
+      if (!w.body.trim()) { w.err = "편지 내용을 입력해 주세요"; return render(); }
+      w.sending = true;
+      tree().letters.push({ o: w.o, p: w.p, x: w.x, y: w.y, paper: w.paper, s: w.s.trim(), b: w.body.trim(), g: [...w.g], r: w.g.includes("rosary") ? w.r : 0 });
+      S.prefill = w.s.trim(); S.page = w.p;
+      return go("sent", { sent: { o: w.o, g: [...w.g], r: w.r } });
+    }
+    case "makeFromLetter": case "makeFromVisit": S.loginMode = "login"; return startCreate("t1");
+    case "createTree": {
+      const name = S.draft.name.trim(); if (!name) return toast("세례명을 입력해 주세요");
+      const id = "t" + Date.now();
+      S.trees[id] = { id, owner: name, ownerId: S.member.id, bg: S.draft.bg, daily: [], invited: 0, letters: [], visits: [], christmasSeen: false };
+      if (S.draft.ref) S.trees[S.draft.ref].invited++;
+      S.prefill = "";
+      go("tree", { viewTree: id, page: 0 }); return toast("트리가 완성됐어요! 이웃에게 공유해 보세요");
+    }
+    case "letters": return go("letters");
+    case "closeModal": S.modal = null; return renderLayer();
+    case "share": return toast("카카오톡 공유 (SDK 키 연결 후 동작)");
+    case "copy": return toast("링크를 복사했어요");
+  }
+});
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "loginForm") return;
+  e.preventDefault();
+  const name = document.getElementById("loginName").value.trim(); if (!name) return;
+  S.member = { id: "mock-" + Math.random().toString(36).slice(2), name };
+  const mine = myTree(); if (mine) return go("tree", { viewTree: mine.id, page: 0 });
+  go("create", { draft: { name: S.prefill || name, bg: 0, ref: S.afterLogin ? S.afterLogin.ref : null } });
+});
+document.addEventListener("input", (e) => {
+  if (e.target.id === "letterBody") { document.getElementById("cnt").textContent = `${[...e.target.value].length}/850`; S.write.body = e.target.value; }
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { if (S.drawer) setDrawer(false); else if (S.sheetOpen) setSheet(false); } });
+document.getElementById("resetBtn").addEventListener("click", () => { S = initial(); render(); });
+try { if (window.innerWidth < 720) document.getElementById("ctrlBox").open = false; } catch (e) {}
+render();
+})();
+</script>
+</body>
+</html>
